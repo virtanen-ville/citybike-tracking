@@ -47,15 +47,59 @@ apiJourneysRouter.get(
 		if (Object.keys(req.query).length === 0) {
 			const journeys = await journeysCollection
 				.find()
-				.limit(100)
+				.limit(1000)
 				.toArray();
 			res.send(journeys);
 		} else {
-			const journeys = await journeysCollection.findOne({
-				_id: req.query.journeyId as unknown as ObjectId,
-			});
-			res.send(journeys);
+			console.log("🚀 ~ file: apiJourneys.ts:48 ~ req.query", req.query);
+
+			const journeys = await journeysCollection
+				.find()
+				.sort({
+					[String(req.query.field)]:
+						req.query.sort === "asc" ? 1 : -1,
+				})
+				.skip(
+					req.query.page && req.query.pageSize
+						? Number(req.query.page) * Number(req.query.pageSize)
+						: 0
+				)
+				.limit(Number(req.query.pageSize))
+				.toArray();
+			const count = await journeysCollection.countDocuments();
+			res.send({ journeys, count });
 		}
+	}
+);
+
+apiJourneysRouter.post(
+	"/filter",
+	async (
+		req: express.Request,
+		res: express.Response,
+		next: express.NextFunction
+	) => {
+		const filters = req.body.filters;
+		console.log("🚀 ~ file: apiJourneys.ts:85 ~ filters", filters);
+		const query = req.body.query;
+
+		const journeys = await journeysCollection
+			.find
+			// Use the $and operator to combine multiple filters
+			// Use the filters object to create the filter object
+			()
+			.sort({
+				[String(req.query.field)]: query.sort === "asc" ? 1 : -1,
+			})
+			.skip(
+				query.page && query.pageSize
+					? Number(query.page) * Number(query.pageSize)
+					: 0
+			)
+			.limit(Number(query.pageSize))
+			.toArray();
+		const count = await journeysCollection.countDocuments();
+		res.send({ journeys, count });
 	}
 );
 

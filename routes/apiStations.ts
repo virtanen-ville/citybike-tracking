@@ -47,7 +47,7 @@ apiStationsRouter.get(
 		if (Object.keys(req.query).length === 0) {
 			const stationResponse = await stationsCollection
 				.find({})
-				.limit(100)
+				//.limit(100)
 				.toArray();
 			res.send(stationResponse);
 		} else {

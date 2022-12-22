@@ -7,8 +7,8 @@ const nextConfig = {
 	async rewrites() {
 		return [
 			{
-				source: "/api/:path*",
-				destination: "https://localhost:3100/api/:path*", // Matched parameters can be used in the destination
+				source: "/api/:slug*",
+				destination: "http://localhost:3100/api/:slug*", // Matched parameters can be used in the destination
 			},
 		];
 	},

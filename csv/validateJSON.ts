@@ -25,11 +25,9 @@ const journeySchema = {
 		properties: {
 			departure: {
 				type: "object",
-				format: "date-time",
 			},
 			return: {
 				type: "object",
-				format: "date-time",
 			},
 			departureStationId: {
 				type: "integer",

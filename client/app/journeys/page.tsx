@@ -1,7 +1,8 @@
+"use client";
 import Head from "next/head";
 import Image from "next/image";
 import { Inter } from "@next/font/google";
-import { Journey, Station } from "../../types/types";
+import { Journey, Station } from "../../../types/types";
 import { useCallback, useEffect, useState } from "react";
 import {
 	DataGrid,
@@ -20,18 +21,19 @@ import {
 	GridToolbarQuickFilter,
 } from "@mui/x-data-grid";
 import { Container } from "@mui/material";
-import { getAllStationsFromDB } from "../controllers/stationsController";
+import { getAllStationsFromDB } from "../../controllers/stationsController";
 import {
 	get1000JourneysFromDB,
 	getFilteredJourneysFromDB,
-} from "../controllers/journeysController";
+} from "../../controllers/journeysController";
+import Lottie from "lottie-react";
+import bicycleAnimation from "../../lotties/cycling.json";
 
 // For each journey show departure and return stations, covered distance in kilometers and duration in minutes
 
-export default function Home() {
+export default function Page() {
 	const [journeys, setJourneys] = useState<Journey[]>([]);
 	const [rowCount, setRowCount] = useState(0);
-	const [stations, setStations] = useState<Station[]>([]);
 	const [sortModel, setSortModel] = useState<GridSortItem>({
 		field: "_id",
 		sort: "asc",
@@ -116,17 +118,14 @@ export default function Home() {
 		},
 	];
 
-	const handleFilterModelChange = useCallback(
-		(filterModel: GridFilterModel) => {
-			console.log(
-				"🚀 ~ file: index.tsx:84 ~ onFilterChange ~ filterModel",
-				filterModel
-			);
-			//  Array of objects: {columnField: 'return', id: 52105, operatorValue: 'before', value: '2021-06-01T05:15'}
-			setFilterModel(filterModel);
-		},
-		[]
-	);
+	const handleFilterModelChange = (filterModel: GridFilterModel) => {
+		console.log(
+			"🚀 ~ file: index.tsx:84 ~ onFilterChange ~ filterModel",
+			filterModel
+		);
+		//  Array of objects: {columnField: 'return', id: 52105, operatorValue: 'before', value: '2021-06-01T05:15'}
+		setFilterModel(filterModel);
+	};
 
 	const handleSortModelChange = useCallback((sortModel: GridSortModel) => {
 		console.log(
@@ -142,6 +141,8 @@ export default function Home() {
 	};
 
 	useEffect(() => {
+		const controller = new AbortController();
+
 		setLoading(true);
 		const queryOptions = {
 			page,
@@ -152,68 +153,56 @@ export default function Home() {
 		const fetchJourneys = async () => {
 			const { journeys, count } = await getFilteredJourneysFromDB(
 				queryOptions,
-				filterModel
+				filterModel,
+				controller
 			);
 			setJourneys(journeys);
 			setRowCount(count);
 			setLoading(false);
 		};
 		fetchJourneys();
+		return () => {
+			//controller.abort();
+		};
 	}, [filterModel, page, pageSize, sortModel]);
-
-	// useEffect(() => {
-	// 	const controller = new AbortController();
-
-	// 	const fetchStations = async () => {
-	// 		const stations = await getAllStationsFromDB(controller);
-	// 		setStations(stations);
-	// 	};
-	// 	fetchStations();
-
-	// 	const fetchJourneys = async () => {
-	// 		const journeys = await get1000JourneysFromDB(controller);
-	// 		setJourneys(journeys);
-	// 		setLoading(false);
-	// 	};
-	// 	fetchJourneys();
-
-	// 	return () => {
-	// 		controller.abort();
-	// 	};
-	// }, []);
 
 	return (
 		<Container maxWidth="md">
-			<div style={{ display: "flex", height: "100vh" }}>
-				<div style={{ flexGrow: 1 }}>
-					<DataGrid
-						sortingMode="server"
-						onSortModelChange={handleSortModelChange}
-						loading={loading}
-						rowCount={rowCountState}
-						keepNonExistentRowsSelected
-						paginationMode="server"
-						page={page}
-						onPageChange={handlePageChange}
-						pageSize={pageSize}
-						onPageSizeChange={(newPageSize) =>
-							setPageSize(newPageSize)
-						}
-						rowsPerPageOptions={[10, 50, 100]}
-						pagination
-						//filterMode="server"
-						onFilterModelChange={handleFilterModelChange}
-						columnVisibilityModel={columnVisibilityModel}
-						onColumnVisibilityModelChange={(newModel) =>
-							setColumnVisibilityModel(newModel)
-						}
-						components={{
-							Toolbar: CustomToolbar,
-						}}
-						rows={rows}
-						columns={columns}
-					/>
-				</div>
+			<div
+				style={{
+					//display: "flex",
+					height: "80vh",
+					marginTop: "20px",
+				}}
+			>
+				<DataGrid
+					sortingMode="server"
+					onSortModelChange={handleSortModelChange}
+					loading={loading}
+					rowCount={rowCountState}
+					keepNonExistentRowsSelected
+					paginationMode="server"
+					page={page}
+					onPageChange={handlePageChange}
+					pageSize={pageSize}
+					onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+					rowsPerPageOptions={[10, 50, 100]}
+					pagination
+					//filterMode="server"
+					filterModel={filterModel}
+					onFilterModelChange={(newFilterModel) =>
+						handleFilterModelChange(newFilterModel)
+					}
+					columnVisibilityModel={columnVisibilityModel}
+					onColumnVisibilityModelChange={(newModel) =>
+						setColumnVisibilityModel(newModel)
+					}
+					components={{
+						Toolbar: CustomToolbar,
+					}}
+					rows={rows}
+					columns={columns}
+				/>
 			</div>
 		</Container>
 	);

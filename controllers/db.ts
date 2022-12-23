@@ -39,7 +39,7 @@ export const seedDb = async (): Promise<void> => {
 			const data = await getDataFromCSVFile(filePath);
 
 			const filteredData = filePath.includes("stations")
-				? data.filter((item) => item)
+				? data.filter((item) => item.id > 0)
 				: data.filter(
 						(item) =>
 							item.coveredDistanceM >= 10 &&
@@ -54,8 +54,18 @@ export const seedDb = async (): Promise<void> => {
 
 			if (filePath.includes("stations")) {
 				const res = await stationsCollection.insertMany(filteredData);
+				console.log(
+					"🚀 ~ file: DB.ts:59 ~ seedDb ~ res",
+					res.acknowledged,
+					res.insertedCount
+				);
 			} else {
 				const res = await journeysCollection.insertMany(filteredData);
+				console.log(
+					"🚀 ~ file: DB.ts:61 ~ seedDb ~ res",
+					res.acknowledged,
+					res.insertedCount
+				);
 			}
 		}
 	} catch (err) {

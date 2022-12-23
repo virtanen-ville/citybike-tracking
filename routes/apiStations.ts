@@ -44,18 +44,8 @@ apiStationsRouter.get(
 		res: express.Response,
 		next: express.NextFunction
 	) => {
-		if (Object.keys(req.query).length === 0) {
-			const stationResponse = await stationsCollection
-				.find({})
-				//.limit(100)
-				.toArray();
-			res.send(stationResponse);
-		} else {
-			const stationResponse = await stationsCollection.findOne({
-				_id: req.query.stationId as unknown as ObjectId,
-			});
-			res.send(stationResponse);
-		}
+		const stations = await stationsCollection.find().toArray();
+		res.send(stations);
 	}
 );
 

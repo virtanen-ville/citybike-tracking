@@ -1,8 +1,6 @@
 "use client";
-import Head from "next/head";
-import Image from "next/image";
-import { Inter } from "@next/font/google";
-import { Journey, Station } from "../../../types/types";
+
+import { Journey } from "../../../types/types";
 import { useCallback, useEffect, useState } from "react";
 import {
 	DataGrid,
@@ -11,23 +9,22 @@ import {
 	GridSortModel,
 	GridSortItem,
 	GridFilterModel,
-	GridToolbar,
 	GridColumnVisibilityModel,
 	GridToolbarColumnsButton,
 	GridToolbarContainer,
 	GridToolbarDensitySelector,
-	GridToolbarExport,
 	GridToolbarFilterButton,
 	GridToolbarQuickFilter,
+	GridValueFormatterParams,
 } from "@mui/x-data-grid";
-import { Container } from "@mui/material";
-import { getAllStationsFromDB } from "../../controllers/stationsController";
 import {
-	get1000JourneysFromDB,
-	getFilteredJourneysFromDB,
-} from "../../controllers/journeysController";
-import Lottie from "lottie-react";
-import bicycleAnimation from "../../lotties/cycling.json";
+	Container,
+	IconButton,
+	InputAdornment,
+	TextField,
+} from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import { getFilteredJourneysFromDB } from "../../controllers/journeysController";
 
 // For each journey show departure and return stations, covered distance in kilometers and duration in minutes
 
@@ -48,6 +45,7 @@ export default function Page() {
 	const [page, setPage] = useState(0);
 	const [pageSize, setPageSize] = useState<number>(100);
 	const [rowCountState, setRowCountState] = useState(rowCount);
+	const [search, setSearch] = useState("");
 
 	useEffect(() => {
 		setRowCountState((prevRowCountState) =>
@@ -103,15 +101,21 @@ export default function Page() {
 		{
 			field: "coveredDistanceM",
 			headerName: "Distance (km)",
-			width: 180,
+			width: 165,
 			align: "right",
 			headerAlign: "right",
 			type: "number",
+			valueFormatter: (params: GridValueFormatterParams<number>) => {
+				if (params.value == null) {
+					return "";
+				}
+				return params.value.toFixed(2);
+			},
 		},
 		{
 			field: "durationSec",
 			headerName: "Duration (min)",
-			width: 180,
+			width: 165,
 			align: "right",
 			headerAlign: "right",
 			type: "number",
@@ -148,6 +152,7 @@ export default function Page() {
 			page,
 			pageSize,
 			...sortModel,
+			search,
 		};
 
 		const fetchJourneys = async () => {
@@ -162,9 +167,9 @@ export default function Page() {
 		};
 		fetchJourneys();
 		return () => {
-			//controller.abort();
+			controller.abort();
 		};
-	}, [filterModel, page, pageSize, sortModel]);
+	}, [filterModel, page, pageSize, sortModel, search]);
 
 	return (
 		<Container maxWidth="md">
@@ -188,6 +193,7 @@ export default function Page() {
 					onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
 					rowsPerPageOptions={[10, 50, 100]}
 					pagination
+					disableSelectionOnClick
 					//filterMode="server"
 					filterModel={filterModel}
 					onFilterModelChange={(newFilterModel) =>
@@ -198,7 +204,7 @@ export default function Page() {
 						setColumnVisibilityModel(newModel)
 					}
 					components={{
-						Toolbar: CustomToolbar,
+						Toolbar: () => CustomToolbar({ setSearch }),
 					}}
 					rows={rows}
 					columns={columns}
@@ -208,13 +214,52 @@ export default function Page() {
 	);
 }
 
-function CustomToolbar() {
+function CustomToolbar({
+	setSearch,
+}: {
+	setSearch: React.Dispatch<React.SetStateAction<string>>;
+}) {
+	const [searchField, setSearchField] = useState("");
+	const handleSearch = () => {
+		setSearch(searchField);
+	};
 	return (
-		<GridToolbarContainer>
-			<GridToolbarColumnsButton />
-			<GridToolbarFilterButton />
-			<GridToolbarDensitySelector />
-			<GridToolbarQuickFilter />
+		<GridToolbarContainer sx={{ display: "flex" }}>
+			<div style={{ flexGrow: 1 }}>
+				<GridToolbarColumnsButton />
+				<GridToolbarFilterButton />
+				<GridToolbarDensitySelector />
+			</div>
+			<TextField
+				id="search"
+				label=""
+				InputProps={{
+					startAdornment: (
+						<InputAdornment position="start">
+							<IconButton
+								size="small"
+								onClick={() => handleSearch()}
+							>
+								<SearchIcon fontSize="inherit" />
+							</IconButton>
+						</InputAdornment>
+					),
+				}}
+				variant="standard"
+				placeholder="Search..."
+				size="small"
+				value={searchField}
+				onKeyPress={(event) => {
+					if (event.key === "Enter") {
+						handleSearch();
+					}
+				}}
+				onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+					if (event.target.value === "") {
+					}
+					setSearchField(event.target.value);
+				}}
+			/>
 		</GridToolbarContainer>
 	);
 }

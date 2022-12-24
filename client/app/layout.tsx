@@ -36,18 +36,18 @@ const getDesignTokens = (mode: PaletteMode) => ({
 			: {
 					// palette values for dark mode
 					primary: {
-						main: grey[800],
+						main: grey[500],
 						// light: grey[400],
 						// dark: grey[900],
 					},
 					secondary: {
-						main: green[800],
+						main: green["A700"],
 						// light: green[400],
 						// dark: green[900],
 					},
 					text: {
 						primary: "#fff",
-						secondary: grey[500],
+						secondary: grey[400],
 					},
 			  }),
 	},

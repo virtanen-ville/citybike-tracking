@@ -1,33 +1,23 @@
 "use client";
-import Head from "next/head";
-import Image from "next/image";
-import { Inter } from "@next/font/google";
-import { Journey, Station } from "../../../types/types";
-import { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { Station } from "../../../types/types";
+import { useEffect, useState } from "react";
 import {
 	DataGrid,
 	GridRowsProp,
 	GridColDef,
-	GridSortModel,
-	GridSortItem,
 	GridFilterModel,
-	GridToolbar,
 	GridColumnVisibilityModel,
 	GridToolbarColumnsButton,
 	GridToolbarContainer,
 	GridToolbarDensitySelector,
-	GridToolbarExport,
 	GridToolbarFilterButton,
 	GridToolbarQuickFilter,
+	GridToolbar,
+	GridEventListener,
 } from "@mui/x-data-grid";
 import { Container } from "@mui/material";
 import { getAllStationsFromDB } from "../../controllers/stationsController";
-import {
-	get1000JourneysFromDB,
-	getFilteredJourneysFromDB,
-} from "../../controllers/journeysController";
-import Lottie from "lottie-react";
-import bicycleAnimation from "../../lotties/cycling.json";
 
 export default function Page() {
 	const [stations, setStations] = useState<Station[]>([]);
@@ -39,10 +29,11 @@ export default function Page() {
 	const [loading, setLoading] = useState(true);
 	const [pageSize, setPageSize] = useState<number>(100);
 	const [filterModel, setFilterModel] = useState<GridFilterModel>();
+	const router = useRouter();
 
 	const rows: GridRowsProp = stations.map((station) => {
 		return {
-			id: station._id,
+			id: station.id,
 			nimi: station.nimi,
 			osoite: station.osoite,
 			kaupunki: station.kaupunki,
@@ -103,6 +94,15 @@ export default function Page() {
 		},
 	];
 
+	const handleRowClick: GridEventListener<"rowClick"> = (
+		params, // GridRowParams
+		event, // MuiEvent<React.MouseEvent<HTMLElement>>
+		details // GridCallbackDetails
+	) => {
+		console.log(`Station id: "${params.row.id}" clicked`);
+		router.push(`/stations/${params.row.id}`);
+	};
+
 	useEffect(() => {
 		const controller = new AbortController();
 		setLoading(true);
@@ -114,7 +114,7 @@ export default function Page() {
 		};
 		fetchStations();
 		return () => {
-			//controller.abort();
+			controller.abort();
 		};
 	}, []);
 
@@ -131,7 +131,7 @@ export default function Page() {
 					loading={loading}
 					rowCount={stations.length}
 					keepNonExistentRowsSelected
-					//page={page}
+					disableSelectionOnClick
 					filterModel={filterModel}
 					onFilterModelChange={(newFilterModel) =>
 						setFilterModel(newFilterModel)
@@ -147,6 +147,7 @@ export default function Page() {
 					components={{
 						Toolbar: CustomToolbar,
 					}}
+					onRowClick={handleRowClick}
 					rows={rows}
 					columns={columns}
 				/>
@@ -157,10 +158,12 @@ export default function Page() {
 
 function CustomToolbar() {
 	return (
-		<GridToolbarContainer>
-			<GridToolbarColumnsButton />
-			<GridToolbarFilterButton />
-			<GridToolbarDensitySelector />
+		<GridToolbarContainer sx={{ display: "flex" }}>
+			<div style={{ flexGrow: 1 }}>
+				<GridToolbarColumnsButton />
+				<GridToolbarFilterButton />
+				<GridToolbarDensitySelector />
+			</div>
 			<GridToolbarQuickFilter />
 		</GridToolbarContainer>
 	);

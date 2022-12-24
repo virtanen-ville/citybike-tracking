@@ -109,7 +109,7 @@ export const getFilteredJourneysFromDB = async (
 		const data = await res.json();
 		return data;
 	}
-	// If there are no filters applied, make a GET request to the server with the query string
+	// If there are no filters applied, make a GET request to the server with the query string and the search term
 	else {
 		let query;
 		if (typeof reqQuery === "string") {

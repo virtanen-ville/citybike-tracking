@@ -85,6 +85,31 @@ export const getAllStationsFromDB = async (
 	return data;
 };
 
+export const getStationDataFromDB = async (
+	id: number,
+	startDate: Date,
+	endDate: Date,
+	controller?: AbortController
+): Promise<any> => {
+	const reqQueryDates: GenericObject | string = {
+		startDate: startDate.getTime(),
+		endDate: endDate.getTime(),
+	};
+	let query = Object.keys(reqQueryDates)
+		.map((key) => `${key}=${reqQueryDates[key]}`)
+		.join("&");
+	const res = await fetch(`/api/stations/${id}?${query}`, {
+		method: "GET",
+		signal: controller?.signal,
+
+		headers: {
+			"Content-Type": "application/json",
+		},
+	});
+	const data = await res.json();
+	return data;
+};
+
 export const getFilteredStationsFromDB = async (
 	reqQueryFilters: GenericObject | string,
 	controller?: AbortController

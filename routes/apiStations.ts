@@ -56,6 +56,21 @@ apiStationsRouter.get(
 		res: express.Response,
 		next: express.NextFunction
 	) => {
+		const station = await stationsCollection.findOne({
+			id: Number(req.params.stationId),
+		});
+
+		res.send(station);
+	}
+);
+
+apiStationsRouter.get(
+	"/data/:stationId",
+	async (
+		req: express.Request,
+		res: express.Response,
+		next: express.NextFunction
+	) => {
 		const endDate = new Date(Number(req.query.endDate)) || new Date();
 		console.log("🚀 ~ file: apiStations.ts:61 ~ endDate", endDate);
 		const startDate = new Date(Number(req.query.startDate)) || new Date(0);
@@ -194,12 +209,7 @@ apiStationsRouter.get(
 			.aggregate(aggTop5DepartureStations)
 			.toArray();
 
-		const station = await stationsCollection.findOne({
-			id: Number(req.params.stationId),
-		});
-
 		res.send({
-			station,
 			averageDistanceDeparted,
 			averageDistanceReturned,
 			countOfDepartures,

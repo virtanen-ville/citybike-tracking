@@ -40,7 +40,7 @@ export const updateStationToDB = async (
 };
 
 export const getStationFromDB = async (
-	stationId: ObjectId,
+	stationId: number,
 	controller?: AbortController
 ): Promise<Station> => {
 	const res = await fetch(`/api/stations/${stationId}`, {
@@ -98,7 +98,7 @@ export const getStationDataFromDB = async (
 	let query = Object.keys(reqQueryDates)
 		.map((key) => `${key}=${reqQueryDates[key]}`)
 		.join("&");
-	const res = await fetch(`/api/stations/${id}?${query}`, {
+	const res = await fetch(`/api/stations/data/${id}?${query}`, {
 		method: "GET",
 		signal: controller?.signal,
 

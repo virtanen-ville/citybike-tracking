@@ -28,3 +28,17 @@ export interface Station {
 	x: number;
 	y: number;
 }
+
+export interface Top5StationData {
+	_id: string;
+	count: number;
+}
+
+export interface StationData {
+	top5ReturnStations: Top5StationData[];
+	top5DepartureStations: Top5StationData[];
+	averageDistanceDeparted: number;
+	averageDistanceReturned: number;
+	countOfDepartures: number;
+	countOfReturns: number;
+}

@@ -9,8 +9,10 @@ import "@fontsource/roboto/700.css";
 import { CssBaseline, PaletteMode } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { grey, green } from "@mui/material/colors";
-
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import NavBar from "./NavBar";
+import type {} from "@mui/x-date-pickers/themeAugmentation";
 
 const getDesignTokens = (mode: PaletteMode) => ({
 	palette: {
@@ -73,13 +75,15 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body>
-				<ColorModeContext.Provider value={toggleColorMode}>
-					<ThemeProvider theme={theme}>
-						<CssBaseline />
-						<NavBar />
-						{children}
-					</ThemeProvider>
-				</ColorModeContext.Provider>
+				<LocalizationProvider dateAdapter={AdapterDayjs}>
+					<ColorModeContext.Provider value={toggleColorMode}>
+						<ThemeProvider theme={theme}>
+							<CssBaseline />
+							<NavBar />
+							{children}
+						</ThemeProvider>
+					</ColorModeContext.Provider>
+				</LocalizationProvider>
 			</body>
 		</html>
 	);

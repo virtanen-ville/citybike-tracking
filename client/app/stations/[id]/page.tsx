@@ -1,9 +1,7 @@
 "use client";
-import { useRouter } from "next/navigation";
 import { Station, StationData } from "../../../../types/types";
 import { useEffect, useState } from "react";
 import { Wrapper, Status } from "@googlemaps/react-wrapper";
-
 import {
 	Alert,
 	AlertTitle,
@@ -12,19 +10,17 @@ import {
 	LinearProgress,
 	List,
 	ListItem,
-	ListItemIcon,
 	ListItemText,
 	ListSubheader,
 	Paper,
-	Switch,
 	TextField,
 	Typography,
+	Box,
 } from "@mui/material";
 import {
 	getStationDataFromDB,
 	getStationFromDB,
 } from "../../../controllers/stationsController";
-import { Box } from "@mui/system";
 import dayjs, { Dayjs } from "dayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import GoogleMap from "./GoogleMap";
@@ -262,8 +258,9 @@ export default function Page({ params }: { params: Params }) {
 								width: "100%",
 							}}
 							subheader={
-								<ListSubheader inset disableGutters>
-									Top 5 Departure Stations:
+								<ListSubheader>
+									Top 5 Departure Stations (journeys ended at{" "}
+									{station?.name})
 								</ListSubheader>
 							}
 						>
@@ -290,8 +287,9 @@ export default function Page({ params }: { params: Params }) {
 								width: "100%",
 							}}
 							subheader={
-								<ListSubheader inset disableGutters>
-									Top 5 Return Stations:
+								<ListSubheader>
+									Top 5 Return Stations (journeys started at{" "}
+									{station?.name}):
 								</ListSubheader>
 							}
 						>

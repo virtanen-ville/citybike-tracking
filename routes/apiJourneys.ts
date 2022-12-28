@@ -46,22 +46,7 @@ apiJourneysRouter.get(
 	) => {
 		if (Object.keys(req.query).length === 0) {
 			const journeys = await journeysCollection
-				.find({
-					$or: [
-						{
-							departureStationName: new RegExp(
-								String(req.query.search),
-								"i"
-							),
-						},
-						{
-							returnStationName: new RegExp(
-								String(req.query.search),
-								"i"
-							),
-						},
-					],
-				})
+				.find()
 				.limit(1000)
 				.toArray();
 			res.send(journeys);
@@ -124,26 +109,98 @@ apiJourneysRouter.post(
 		res: express.Response,
 		next: express.NextFunction
 	) => {
-		const filters = req.body.filters;
+		const filters = req.body.filters[0];
+		const value =
+			filters.columnField === "coveredDistanceM"
+				? Number(filters.value) * 1000
+				: Number(filters.value) * 60;
 		console.log("🚀 ~ file: apiJourneys.ts:85 ~ filters", filters);
 		const query = req.body.query;
+		console.log("🚀 ~ file: apiJourneys.ts:115 ~ query", query);
 
 		const journeys = await journeysCollection
-			.find
-			// Use the $and operator to combine multiple filters
-			// Use the filters object to create the filter object
-			()
+			.find({
+				[filters.columnField]:
+					filters.operatorValue === ">="
+						? {
+								$gte: value,
+						  }
+						: filters.operatorValue === "<="
+						? {
+								$lte: value,
+						  }
+						: filters.operatorValue === "="
+						? {
+								$eq: value,
+						  }
+						: filters.operatorValue === "!="
+						? {
+								$ne: value,
+						  }
+						: filters.operatorValue === ">"
+						? {
+								$gt: value,
+						  }
+						: filters.operatorValue === "<"
+						? {
+								$lt: value,
+						  }
+						: {},
+
+				$or: [
+					{
+						departureStationName: new RegExp(query.search, "i"),
+					},
+					{
+						returnStationName: new RegExp(query.search, "i"),
+					},
+				],
+			})
 			.sort({
-				[String(req.query.field)]: query.sort === "asc" ? 1 : -1,
+				[query.field]: query.sort === "asc" ? 1 : -1,
 			})
 			.skip(
-				query.page && query.pageSize
-					? Number(query.page) * Number(query.pageSize)
-					: 0
+				query.page && query.pageSize ? query.page * query.pageSize : 0
 			)
-			.limit(Number(query.pageSize))
+			.limit(query.pageSize)
 			.toArray();
-		const count = await journeysCollection.countDocuments();
+		const count = await journeysCollection.countDocuments({
+			[filters.columnField]:
+				filters.operatorValue === ">="
+					? {
+							$gte: value,
+					  }
+					: filters.operatorValue === "<="
+					? {
+							$lte: value,
+					  }
+					: filters.operatorValue === "="
+					? {
+							$eq: value,
+					  }
+					: filters.operatorValue === "!="
+					? {
+							$ne: value,
+					  }
+					: filters.operatorValue === ">"
+					? {
+							$gt: value,
+					  }
+					: filters.operatorValue === "<"
+					? {
+							$lt: value,
+					  }
+					: {},
+
+			$or: [
+				{
+					departureStationName: new RegExp(query.search, "i"),
+				},
+				{
+					returnStationName: new RegExp(query.search, "i"),
+				},
+			],
+		});
 		res.send({ journeys, count });
 	}
 );

@@ -16,6 +16,7 @@ import {
 	GridToolbarFilterButton,
 	GridToolbarQuickFilter,
 	GridValueFormatterParams,
+	getGridNumericOperators,
 } from "@mui/x-data-grid";
 import {
 	Container,
@@ -47,6 +48,16 @@ export default function Page() {
 	const [rowCountState, setRowCountState] = useState(rowCount);
 	const [search, setSearch] = useState("");
 
+	const newFilterOperators = getGridNumericOperators().filter(
+		(operator) =>
+			operator.value === ">=" ||
+			operator.value === "<=" ||
+			operator.value === "=" ||
+			operator.value === "!=" ||
+			operator.value === "<" ||
+			operator.value === ">"
+	);
+
 	useEffect(() => {
 		setRowCountState((prevRowCountState) =>
 			rowCount !== undefined ? rowCount : prevRowCountState
@@ -73,6 +84,7 @@ export default function Page() {
 			align: "left",
 			headerAlign: "left",
 			type: "dateTime",
+			filterable: false,
 		},
 		{
 			field: "return",
@@ -81,6 +93,7 @@ export default function Page() {
 			align: "left",
 			headerAlign: "left",
 			type: "dateTime",
+			filterable: false,
 		},
 		{
 			field: "departureStationName",
@@ -89,6 +102,7 @@ export default function Page() {
 			align: "left",
 			headerAlign: "left",
 			type: "string",
+			filterable: false,
 		},
 		{
 			field: "returnStationName",
@@ -97,6 +111,7 @@ export default function Page() {
 			align: "left",
 			headerAlign: "left",
 			type: "string",
+			filterable: false,
 		},
 		{
 			field: "coveredDistanceM",
@@ -111,6 +126,7 @@ export default function Page() {
 				}
 				return params.value.toFixed(2);
 			},
+			filterOperators: newFilterOperators,
 		},
 		{
 			field: "durationSec",
@@ -119,23 +135,16 @@ export default function Page() {
 			align: "right",
 			headerAlign: "right",
 			type: "number",
+			filterOperators: newFilterOperators,
 		},
 	];
 
 	const handleFilterModelChange = (filterModel: GridFilterModel) => {
-		console.log(
-			"🚀 ~ file: index.tsx:84 ~ onFilterChange ~ filterModel",
-			filterModel
-		);
 		//  Array of objects: {columnField: 'return', id: 52105, operatorValue: 'before', value: '2021-06-01T05:15'}
 		setFilterModel(filterModel);
 	};
 
 	const handleSortModelChange = useCallback((sortModel: GridSortModel) => {
-		console.log(
-			"🚀 ~ file: index.tsx:70 ~ handleSortModelChange ~ sortModel",
-			sortModel
-		);
 		// array of one object { field: "durationSec", sort: "asc" }
 		setSortModel(sortModel[0]);
 	}, []);
@@ -172,45 +181,43 @@ export default function Page() {
 	}, [filterModel, page, pageSize, sortModel, search]);
 
 	return (
-		<Container maxWidth="md">
-			<div
-				style={{
-					//display: "flex",
-					height: "80vh",
-					marginTop: "20px",
+		<Container
+			maxWidth="md"
+			sx={{
+				marginTop: "1.5rem",
+				height: "80vh",
+			}}
+		>
+			<DataGrid
+				sortingMode="server"
+				onSortModelChange={handleSortModelChange}
+				loading={loading}
+				rowCount={rowCountState}
+				keepNonExistentRowsSelected
+				paginationMode="server"
+				page={page}
+				onPageChange={handlePageChange}
+				pageSize={pageSize}
+				onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+				rowsPerPageOptions={[10, 50, 100]}
+				pagination
+				disableSelectionOnClick
+				filterMode="server"
+				//disableColumnFilter
+				filterModel={filterModel}
+				onFilterModelChange={(newFilterModel) =>
+					handleFilterModelChange(newFilterModel)
+				}
+				columnVisibilityModel={columnVisibilityModel}
+				onColumnVisibilityModelChange={(newModel) =>
+					setColumnVisibilityModel(newModel)
+				}
+				components={{
+					Toolbar: () => CustomToolbar({ setSearch, search }),
 				}}
-			>
-				<DataGrid
-					sortingMode="server"
-					onSortModelChange={handleSortModelChange}
-					loading={loading}
-					rowCount={rowCountState}
-					keepNonExistentRowsSelected
-					paginationMode="server"
-					page={page}
-					onPageChange={handlePageChange}
-					pageSize={pageSize}
-					onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-					rowsPerPageOptions={[10, 50, 100]}
-					pagination
-					disableSelectionOnClick
-					filterMode="server"
-					//disableColumnFilter
-					filterModel={filterModel}
-					onFilterModelChange={(newFilterModel) =>
-						handleFilterModelChange(newFilterModel)
-					}
-					columnVisibilityModel={columnVisibilityModel}
-					onColumnVisibilityModelChange={(newModel) =>
-						setColumnVisibilityModel(newModel)
-					}
-					components={{
-						Toolbar: () => CustomToolbar({ setSearch, search }),
-					}}
-					rows={rows}
-					columns={columns}
-				/>
-			</div>
+				rows={rows}
+				columns={columns}
+			/>
 		</Container>
 	);
 }
@@ -230,7 +237,7 @@ function CustomToolbar({
 		<GridToolbarContainer sx={{ display: "flex" }}>
 			<div style={{ flexGrow: 1 }}>
 				<GridToolbarColumnsButton />
-				{/* <GridToolbarFilterButton /> */}
+				<GridToolbarFilterButton />
 				<GridToolbarDensitySelector />
 			</div>
 			<TextField

@@ -46,7 +46,22 @@ apiJourneysRouter.get(
 	) => {
 		if (Object.keys(req.query).length === 0) {
 			const journeys = await journeysCollection
-				.find()
+				.find({
+					$or: [
+						{
+							departureStationName: new RegExp(
+								String(req.query.search),
+								"i"
+							),
+						},
+						{
+							returnStationName: new RegExp(
+								String(req.query.search),
+								"i"
+							),
+						},
+					],
+				})
 				.limit(1000)
 				.toArray();
 			res.send(journeys);
@@ -54,7 +69,22 @@ apiJourneysRouter.get(
 			console.log("🚀 ~ file: apiJourneys.ts:48 ~ req.query", req.query);
 
 			const journeys = await journeysCollection
-				.find()
+				.find({
+					$or: [
+						{
+							departureStationName: new RegExp(
+								String(req.query.search),
+								"i"
+							),
+						},
+						{
+							returnStationName: new RegExp(
+								String(req.query.search),
+								"i"
+							),
+						},
+					],
+				})
 				.sort({
 					[String(req.query.field)]:
 						req.query.sort === "asc" ? 1 : -1,
@@ -66,7 +96,22 @@ apiJourneysRouter.get(
 				)
 				.limit(Number(req.query.pageSize))
 				.toArray();
-			const count = await journeysCollection.countDocuments();
+			const count = await journeysCollection.countDocuments({
+				$or: [
+					{
+						departureStationName: new RegExp(
+							String(req.query.search),
+							"i"
+						),
+					},
+					{
+						returnStationName: new RegExp(
+							String(req.query.search),
+							"i"
+						),
+					},
+				],
+			});
 			res.send({ journeys, count });
 		}
 	}

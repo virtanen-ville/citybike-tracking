@@ -194,7 +194,8 @@ export default function Page() {
 					rowsPerPageOptions={[10, 50, 100]}
 					pagination
 					disableSelectionOnClick
-					//filterMode="server"
+					filterMode="server"
+					//disableColumnFilter
 					filterModel={filterModel}
 					onFilterModelChange={(newFilterModel) =>
 						handleFilterModelChange(newFilterModel)
@@ -204,7 +205,7 @@ export default function Page() {
 						setColumnVisibilityModel(newModel)
 					}
 					components={{
-						Toolbar: () => CustomToolbar({ setSearch }),
+						Toolbar: () => CustomToolbar({ setSearch, search }),
 					}}
 					rows={rows}
 					columns={columns}
@@ -216,10 +217,12 @@ export default function Page() {
 
 function CustomToolbar({
 	setSearch,
+	search,
 }: {
 	setSearch: React.Dispatch<React.SetStateAction<string>>;
+	search: string;
 }) {
-	const [searchField, setSearchField] = useState("");
+	const [searchField, setSearchField] = useState(search);
 	const handleSearch = () => {
 		setSearch(searchField);
 	};
@@ -227,7 +230,7 @@ function CustomToolbar({
 		<GridToolbarContainer sx={{ display: "flex" }}>
 			<div style={{ flexGrow: 1 }}>
 				<GridToolbarColumnsButton />
-				<GridToolbarFilterButton />
+				{/* <GridToolbarFilterButton /> */}
 				<GridToolbarDensitySelector />
 			</div>
 			<TextField

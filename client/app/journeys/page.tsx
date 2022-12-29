@@ -14,23 +14,14 @@ import {
 	GridToolbarContainer,
 	GridToolbarDensitySelector,
 	GridToolbarFilterButton,
-	GridToolbarQuickFilter,
 	GridValueFormatterParams,
 	getGridNumericOperators,
 } from "@mui/x-data-grid";
-import {
-	Button,
-	Container,
-	IconButton,
-	InputAdornment,
-	TextField,
-} from "@mui/material";
+import { Button, Container, InputAdornment, TextField } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 import { getFilteredJourneysFromDB } from "../../controllers/journeysController";
 import AddJourneyDialog from "./AddJourneyDialog";
-
-// For each journey show departure and return stations, covered distance in kilometers and duration in minutes
 
 export default function Page() {
 	const [journeys, setJourneys] = useState<Journey[]>([]);
@@ -144,12 +135,10 @@ export default function Page() {
 	];
 
 	const handleFilterModelChange = (filterModel: GridFilterModel) => {
-		//  Array of objects: {columnField: 'return', id: 52105, operatorValue: 'before', value: '2021-06-01T05:15'}
 		setFilterModel(filterModel);
 	};
 
 	const handleSortModelChange = useCallback((sortModel: GridSortModel) => {
-		// array of one object { field: "durationSec", sort: "asc" }
 		setSortModel(sortModel[0]);
 	}, []);
 
@@ -212,7 +201,6 @@ export default function Page() {
 					pagination
 					disableSelectionOnClick
 					filterMode="server"
-					//disableColumnFilter
 					filterModel={filterModel}
 					onFilterModelChange={(newFilterModel) =>
 						handleFilterModelChange(newFilterModel)
@@ -247,9 +235,6 @@ function CustomToolbar({
 	search: string;
 	setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-	// const handleSearch = () => {
-	// 	setSearch(searchField);
-	// };
 	return (
 		<GridToolbarContainer sx={{ display: "flex" }}>
 			<div style={{ flexGrow: 1 }}>
@@ -272,12 +257,7 @@ function CustomToolbar({
 				InputProps={{
 					startAdornment: (
 						<InputAdornment position="start">
-							<IconButton
-								size="small"
-								//onClick={() => handleSearch()}
-							>
-								<SearchIcon fontSize="inherit" />
-							</IconButton>
+							<SearchIcon fontSize="small" />
 						</InputAdornment>
 					),
 				}}
@@ -285,11 +265,6 @@ function CustomToolbar({
 				placeholder="Search..."
 				size="small"
 				value={search}
-				// onKeyPress={(event) => {
-				// 	if (event.key === "Enter") {
-				// 		handleSearch();
-				// 	}
-				// }}
 				onChange={(e) => {
 					setSearch(e.target.value);
 				}}

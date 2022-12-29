@@ -8,7 +8,7 @@ import {
 	DialogTitle,
 	TextField,
 } from "@mui/material";
-import { DatePicker, DateTimePicker } from "@mui/x-date-pickers";
+import { DateTimePicker } from "@mui/x-date-pickers";
 import { TimePickerToolbar } from "@mui/x-date-pickers/TimePicker/TimePickerToolbar";
 import dayjs, { Dayjs } from "dayjs";
 import React, { useState } from "react";
@@ -40,7 +40,6 @@ export default function AddJourneyDialog({
 	const [coveredDistanceM, setCoveredDistanceM] = useState<
 		number | undefined
 	>();
-	//const [durationSec, setDurationSec] = useState<number | undefined>();
 
 	const handleClose = () => {
 		setDialogOpen(false);
@@ -90,6 +89,7 @@ export default function AddJourneyDialog({
 						openTo="day"
 						views={["year", "day", "hours", "minutes", "seconds"]}
 						inputFormat="D.M.YYYY [klo] HH.mm.ss"
+						disableMaskedInput
 						minDate={dayjs("2021-05-01T00:00")}
 						maxDate={returnTime || dayjs("2021-07-31T23:59")}
 						value={departure}
@@ -106,6 +106,7 @@ export default function AddJourneyDialog({
 						showToolbar
 						views={["year", "day", "hours", "minutes", "seconds"]}
 						inputFormat="D.M.YYYY [klo] HH.mm.ss"
+						disableMaskedInput
 						maxDate={dayjs("2021-07-31T23:59")}
 						minDate={departure || dayjs("2021-05-31T00:00")}
 						value={returnTime}
@@ -172,7 +173,6 @@ export default function AddJourneyDialog({
 					type="number"
 					value={durationSec}
 					fullWidth
-					//onChange={(e) => setDurationSec(Number(e.target.value))}
 				/>
 			</DialogContent>
 			<DialogActions>

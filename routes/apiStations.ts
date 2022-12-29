@@ -72,9 +72,7 @@ apiStationsRouter.get(
 		next: express.NextFunction
 	) => {
 		const endDate = new Date(Number(req.query.endDate)) || new Date();
-		console.log("🚀 ~ file: apiStations.ts:61 ~ endDate", endDate);
 		const startDate = new Date(Number(req.query.startDate)) || new Date(0);
-		console.log("🚀 ~ file: apiStations.ts:63 ~ startDate", startDate);
 
 		const aggAverageDistanceDeparted = [
 			{
@@ -130,7 +128,6 @@ apiStationsRouter.get(
 
 		const countOfDepartures = await journeysCollection.countDocuments({
 			departureStationId: Number(req.params.stationId),
-			// check that the time is later than startDate and earlier than endDate
 			departure: {
 				$gte: new Date(startDate),
 				$lte: new Date(endDate),

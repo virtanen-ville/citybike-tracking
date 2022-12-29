@@ -8,9 +8,7 @@ import { Container, Typography } from "@mui/material";
 import Lottie from "lottie-react";
 import Link from "next/link";
 import bicycleAnimation from "../lotties/cycling.json";
-import { grey, green } from "@mui/material/colors";
-
-// For each journey show departure and return stations, covered distance in kilometers and duration in minutes
+import { green } from "@mui/material/colors";
 
 export default function Page() {
 	const fontTheme = createTheme({

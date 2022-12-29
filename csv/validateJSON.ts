@@ -7,7 +7,6 @@ addFormats(ajv);
 
 const journeySchema = {
 	type: "array",
-	//	uniqueItemProperties: ["departure"], Not absolutely unique
 	description:
 		"A list of objects, each one representing a journey made with a bike",
 	items: {

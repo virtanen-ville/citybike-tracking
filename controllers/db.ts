@@ -20,7 +20,6 @@ export const seedDb = async (): Promise<void> => {
 	await db.createCollection<Station>("stations");
 	const stationsCollection = db.collection<Station>("stations");
 
-	// Your path to the files directory
 	const filesDirectory = path.join(
 		__dirname,
 		process.env.FILE_PATH as string

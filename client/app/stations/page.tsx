@@ -13,7 +13,6 @@ import {
 	GridToolbarDensitySelector,
 	GridToolbarFilterButton,
 	GridToolbarQuickFilter,
-	GridToolbar,
 	GridEventListener,
 } from "@mui/x-data-grid";
 import { Button, Container } from "@mui/material";
@@ -103,7 +102,6 @@ export default function Page() {
 		event, // MuiEvent<React.MouseEvent<HTMLElement>>
 		details // GridCallbackDetails
 	) => {
-		console.log(`Station id: "${params.row.id}" clicked`);
 		router.push(`/stations/${params.row.id}`);
 	};
 

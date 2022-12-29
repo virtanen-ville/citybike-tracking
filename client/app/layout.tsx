@@ -63,7 +63,9 @@ export default function RootLayout({
 }: {
 	children: React.ReactNode;
 }) {
-	const [mode, setMode] = React.useState<"light" | "dark">("light");
+	const [mode, setMode] = React.useState<"light" | "dark">(
+		(localStorage.getItem("mode") as "light" | "dark") || "light"
+	);
 	const toggleColorMode = () => {
 		// Save mode to local storage so the preference persists
 		localStorage.setItem("mode", mode === "light" ? "dark" : "light");

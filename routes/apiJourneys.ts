@@ -51,8 +51,6 @@ apiJourneysRouter.get(
 				.toArray();
 			res.send(journeys);
 		} else {
-			console.log("🚀 ~ file: apiJourneys.ts:48 ~ req.query", req.query);
-
 			const journeys = await journeysCollection
 				.find({
 					$or: [
@@ -114,9 +112,7 @@ apiJourneysRouter.post(
 			filters.columnField === "coveredDistanceM"
 				? Number(filters.value) * 1000
 				: Number(filters.value) * 60;
-		console.log("🚀 ~ file: apiJourneys.ts:85 ~ filters", filters);
 		const query = req.body.query;
-		console.log("🚀 ~ file: apiJourneys.ts:115 ~ query", query);
 
 		const journeys = await journeysCollection
 			.find({

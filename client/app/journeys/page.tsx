@@ -19,13 +19,16 @@ import {
 	getGridNumericOperators,
 } from "@mui/x-data-grid";
 import {
+	Button,
 	Container,
 	IconButton,
 	InputAdornment,
 	TextField,
 } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 import { getFilteredJourneysFromDB } from "../../controllers/journeysController";
+import AddJourneyDialog from "./AddJourneyDialog";
 
 // For each journey show departure and return stations, covered distance in kilometers and duration in minutes
 
@@ -47,6 +50,7 @@ export default function Page() {
 	const [pageSize, setPageSize] = useState<number>(100);
 	const [rowCountState, setRowCountState] = useState(rowCount);
 	const [search, setSearch] = useState("");
+	const [dialogOpen, setDialogOpen] = useState(false);
 
 	const newFilterOperators = getGridNumericOperators().filter(
 		(operator) =>
@@ -181,66 +185,88 @@ export default function Page() {
 	}, [filterModel, page, pageSize, sortModel, search]);
 
 	return (
-		<Container
-			maxWidth="md"
-			sx={{
-				marginTop: "1.5rem",
-				height: "80vh",
-			}}
-		>
-			<DataGrid
-				sortingMode="server"
-				onSortModelChange={handleSortModelChange}
-				loading={loading}
-				rowCount={rowCountState}
-				keepNonExistentRowsSelected
-				paginationMode="server"
-				page={page}
-				onPageChange={handlePageChange}
-				pageSize={pageSize}
-				onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-				rowsPerPageOptions={[10, 50, 100]}
-				pagination
-				disableSelectionOnClick
-				filterMode="server"
-				//disableColumnFilter
-				filterModel={filterModel}
-				onFilterModelChange={(newFilterModel) =>
-					handleFilterModelChange(newFilterModel)
-				}
-				columnVisibilityModel={columnVisibilityModel}
-				onColumnVisibilityModelChange={(newModel) =>
-					setColumnVisibilityModel(newModel)
-				}
-				components={{
-					Toolbar: () => CustomToolbar({ setSearch, search }),
-				}}
-				rows={rows}
-				columns={columns}
+		<>
+			<AddJourneyDialog
+				dialogOpen={dialogOpen}
+				setDialogOpen={setDialogOpen}
 			/>
-		</Container>
+			<Container
+				maxWidth="md"
+				sx={{
+					marginTop: "1.5rem",
+					height: "80vh",
+				}}
+			>
+				<DataGrid
+					sortingMode="server"
+					onSortModelChange={handleSortModelChange}
+					loading={loading}
+					rowCount={rowCountState}
+					keepNonExistentRowsSelected
+					paginationMode="server"
+					page={page}
+					onPageChange={handlePageChange}
+					pageSize={pageSize}
+					onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+					rowsPerPageOptions={[10, 50, 100]}
+					pagination
+					disableSelectionOnClick
+					filterMode="server"
+					//disableColumnFilter
+					filterModel={filterModel}
+					onFilterModelChange={(newFilterModel) =>
+						handleFilterModelChange(newFilterModel)
+					}
+					columnVisibilityModel={columnVisibilityModel}
+					onColumnVisibilityModelChange={(newModel) =>
+						setColumnVisibilityModel(newModel)
+					}
+					components={{
+						Toolbar: () => (
+							<CustomToolbar
+								setSearch={setSearch}
+								search={search}
+								setDialogOpen={setDialogOpen}
+							/>
+						),
+					}}
+					rows={rows}
+					columns={columns}
+				/>
+			</Container>
+		</>
 	);
 }
 
 function CustomToolbar({
 	setSearch,
 	search,
+	setDialogOpen,
 }: {
 	setSearch: React.Dispatch<React.SetStateAction<string>>;
 	search: string;
+	setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-	const [searchField, setSearchField] = useState(search);
-	const handleSearch = () => {
-		setSearch(searchField);
-	};
+	// const handleSearch = () => {
+	// 	setSearch(searchField);
+	// };
 	return (
 		<GridToolbarContainer sx={{ display: "flex" }}>
 			<div style={{ flexGrow: 1 }}>
 				<GridToolbarColumnsButton />
 				<GridToolbarFilterButton />
 				<GridToolbarDensitySelector />
+				<Button
+					onClick={() => setDialogOpen(true)}
+					variant="text"
+					startIcon={<AddIcon />}
+				>
+					Add
+				</Button>
 			</div>
+
 			<TextField
+				autoFocus
 				id="search"
 				label=""
 				InputProps={{
@@ -248,7 +274,7 @@ function CustomToolbar({
 						<InputAdornment position="start">
 							<IconButton
 								size="small"
-								onClick={() => handleSearch()}
+								//onClick={() => handleSearch()}
 							>
 								<SearchIcon fontSize="inherit" />
 							</IconButton>
@@ -258,16 +284,14 @@ function CustomToolbar({
 				variant="standard"
 				placeholder="Search..."
 				size="small"
-				value={searchField}
-				onKeyPress={(event) => {
-					if (event.key === "Enter") {
-						handleSearch();
-					}
-				}}
-				onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-					if (event.target.value === "") {
-					}
-					setSearchField(event.target.value);
+				value={search}
+				// onKeyPress={(event) => {
+				// 	if (event.key === "Enter") {
+				// 		handleSearch();
+				// 	}
+				// }}
+				onChange={(e) => {
+					setSearch(e.target.value);
 				}}
 			/>
 		</GridToolbarContainer>

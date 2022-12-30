@@ -9,13 +9,13 @@ import apiStationsRouter from "./routes/apiStations";
 const app = express();
 app.use(cors({ origin: "http://localhost:3000" }));
 
-app.use(express.static(path.resolve(__dirname, "client/.next/server/app")));
+app.use(express.static(path.resolve(String(process.env.DEPLOYMENT_PATH))));
 app.use("/api/journeys", apiJourneysRouter);
 app.use("/api/stations", apiStationsRouter);
 
 app.get("/*", function (req, res) {
-	//res.sendFile(path.join(__dirname, "index.html"));
-	res.sendFile(path.join(__dirname, "client/.next/server/app", "index.html"));
+	res.sendFile(path.join(String(process.env.DEPLOYMENT_PATH), "index.html"));
+	//res.sendFile(path.join(__dirname, "client/.next/server/app", "index.html"));
 });
 
 // Check if the citybike database exists, if not, seed it

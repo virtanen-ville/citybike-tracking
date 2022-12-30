@@ -2,7 +2,7 @@ import path from "path";
 import express from "express";
 import apiJourneysRouter from "./routes/apiJourneys";
 
-import { client, seedDb } from "./controllers/db";
+import { client, seedDb } from "./db";
 import cors from "cors";
 import apiStationsRouter from "./routes/apiStations";
 

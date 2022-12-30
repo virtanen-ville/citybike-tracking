@@ -43,6 +43,7 @@ jspm_packages/
 
 # Files directories (large files)
 files/
+static/
 
 # TypeScript v1 declaration files
 typings/

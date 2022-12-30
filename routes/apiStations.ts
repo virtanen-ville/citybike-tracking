@@ -1,6 +1,6 @@
 import express from "express";
 import { ObjectId } from "mongodb";
-import { journeysCollection, stationsCollection } from "../controllers/db";
+import { journeysCollection, stationsCollection } from "../db";
 
 const apiStationsRouter: express.Router = express.Router();
 

@@ -1,10 +1,10 @@
 import dotenv from "dotenv";
 import { MongoClient } from "mongodb";
-import { Journey, Station } from "../types/types";
-import getDataFromCSVFile from "../csv/readFile";
+import { Journey, Station } from "./types/types";
+import getDataFromCSVFile from "./csv/readFile";
 import { readdir } from "node:fs/promises";
 import path from "path";
-import { validateJourneys, validateStations } from "../csv/validateJSON";
+import { validateJourneys, validateStations } from "./csv/validateJSON";
 
 dotenv.config();
 
@@ -20,10 +20,7 @@ export const seedDb = async (): Promise<void> => {
 	await db.createCollection<Station>("stations");
 	const stationsCollection = db.collection<Station>("stations");
 
-	const filesDirectory = path.join(
-		__dirname,
-		process.env.FILE_PATH as string
-	);
+	const filesDirectory = path.join(__dirname, "./static");
 	try {
 		const files = await readdir(filesDirectory);
 		const filteredFiles = files.filter(

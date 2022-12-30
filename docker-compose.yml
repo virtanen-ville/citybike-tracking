@@ -1,8 +1,8 @@
-version: "3.8"
+version: "3.9"
 
 services:
     backend:
-        image: dev-academy2023-backend
+        build: .
         ports:
             - 3100:3100
         environment:
@@ -10,7 +10,9 @@ services:
             - MONGO_URI=mongodb://user1:Passw0rd@mongo:27017/
             - FILE_PATH="../files/"
         volumes:
-            - files:/home/node/app
+            - type: bind
+            - source: ./static
+            - target: ./static
 
     mongo:
         image: mongo

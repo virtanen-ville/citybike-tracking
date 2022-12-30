@@ -12,12 +12,13 @@ import {
 import PedalBikeIcon from "@mui/icons-material/PedalBike";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
-import { ColorModeContext } from "./layout";
+import { useColorMode } from "./ColorModeContext";
+//import { ColorModeContext } from "./layout";
 import Link from "next/link";
 
 export default function NavBar() {
 	const theme = useTheme();
-	const toggleColorMode = React.useContext(ColorModeContext);
+	const toggleColorMode = useColorMode();
 
 	return (
 		<AppBar position="sticky">

@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import "@fontsource/m-plus-rounded-1c";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
@@ -63,9 +63,7 @@ export default function RootLayout({
 }: {
 	children: React.ReactNode;
 }) {
-	const [mode, setMode] = React.useState<"light" | "dark">(
-		(localStorage.getItem("mode") as "light" | "dark") || "light"
-	);
+	const [mode, setMode] = React.useState<"light" | "dark">("light");
 	const toggleColorMode = () => {
 		// Save mode to local storage so the preference persists
 		localStorage.setItem("mode", mode === "light" ? "dark" : "light");
@@ -73,6 +71,13 @@ export default function RootLayout({
 	};
 
 	const theme = createTheme(getDesignTokens(mode));
+
+	useEffect(() => {
+		const localMode = localStorage.getItem("mode");
+		if (localMode) {
+			setMode(localMode as "light" | "dark");
+		}
+	}, []);
 
 	return (
 		<html lang="en">

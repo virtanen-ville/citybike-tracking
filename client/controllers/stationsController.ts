@@ -1,5 +1,5 @@
 import { ObjectId } from "bson";
-import { Station } from "../../types/types";
+import { Station } from "../types/types";
 type GenericObject = Record<string, unknown>;
 
 export const saveStationToDB = async (

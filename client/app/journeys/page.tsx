@@ -1,6 +1,6 @@
 "use client";
 
-import { Journey } from "../../../types/types";
+import { Journey } from "../../types/types";
 import { useCallback, useEffect, useState } from "react";
 import {
 	DataGrid,

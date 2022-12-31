@@ -8,7 +8,7 @@ import {
 	TextField,
 } from "@mui/material";
 import React, { useState } from "react";
-import { Station } from "../../../types/types";
+import { Station } from "../../types/types";
 import { saveStationToDB } from "../../controllers/stationsController";
 
 export default function AddStationDialog({

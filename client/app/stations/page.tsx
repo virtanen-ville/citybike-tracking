@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { Station } from "../../../types/types";
+import { Station } from "../../types/types";
 import { useEffect, useState } from "react";
 import {
 	DataGrid,

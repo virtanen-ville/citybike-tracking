@@ -12,7 +12,7 @@ import { DateTimePicker } from "@mui/x-date-pickers";
 import { TimePickerToolbar } from "@mui/x-date-pickers/TimePicker/TimePickerToolbar";
 import dayjs, { Dayjs } from "dayjs";
 import React, { useState } from "react";
-import { Journey } from "../../../types/types";
+import { Journey } from "../../types/types";
 import { saveJourneyToDB } from "../../controllers/journeysController";
 
 export default function AddJourneyDialog({

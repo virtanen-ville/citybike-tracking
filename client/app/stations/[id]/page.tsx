@@ -1,5 +1,5 @@
 "use client";
-import { Station, StationData } from "../../../../types/types";
+import { Station, StationData } from "../../../types/types";
 import { useEffect, useState } from "react";
 import { Wrapper, Status } from "@googlemaps/react-wrapper";
 import {

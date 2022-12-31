@@ -110,9 +110,16 @@ export default function Page() {
 		setLoading(true);
 
 		const fetchStations = async () => {
-			const stations = await getAllStationsFromDB(controller);
-			setStations(stations);
-			setLoading(false);
+			try {
+				const stations = await getAllStationsFromDB(controller);
+				setStations(stations);
+				setLoading(false);
+			} catch (error: any) {
+				if (error.name === "AbortError") {
+					return;
+				}
+				console.error(error);
+			}
 		};
 		fetchStations();
 		return () => {

@@ -8,7 +8,8 @@ const nextConfig = {
 		return [
 			{
 				source: "/api/:slug*",
-				destination: "http://localhost:3100/api/:slug*", // Matched parameters can be used in the destination
+				destination: process.env.SERVER_URL + "/api/:slug*",
+				// Matched parameters can be used in the destination
 			},
 		];
 	},

@@ -158,15 +158,23 @@ export default function Page() {
 		};
 
 		const fetchJourneys = async () => {
-			const { journeys, count } = await getFilteredJourneysFromDB(
-				queryOptions,
-				filterModel,
-				controller
-			);
-			setJourneys(journeys);
-			setRowCount(count);
-			setLoading(false);
+			try {
+				const { journeys, count } = await getFilteredJourneysFromDB(
+					queryOptions,
+					filterModel,
+					controller
+				);
+				setJourneys(journeys);
+				setRowCount(count);
+				setLoading(false);
+			} catch (error: any) {
+				if (error.name === "AbortError") {
+					return;
+				}
+				console.error(error);
+			}
 		};
+
 		fetchJourneys();
 		return () => {
 			controller.abort();

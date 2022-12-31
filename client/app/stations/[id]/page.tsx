@@ -107,9 +107,16 @@ export default function Page({ params }: { params: Params }) {
 		const controller = new AbortController();
 		setStationLoading(true);
 		const fetchStation = async () => {
-			const data = await getStationFromDB(params.id, controller);
-			setStation(data);
-			setStationLoading(false);
+			try {
+				const data = await getStationFromDB(params.id, controller);
+				setStation(data);
+				setStationLoading(false);
+			} catch (error: any) {
+				if (error.name === "AbortError") {
+					return;
+				}
+				console.error(error);
+			}
 		};
 		fetchStation();
 		return () => {

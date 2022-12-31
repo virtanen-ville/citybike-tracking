@@ -2,6 +2,21 @@
 
 This is an app (UI and a backend service) for displaying data from journeys made with city bikes in the Helsinki Capital area.
 
+**A live version of the app can be found here: <https://citybike-tracking.vercel.app>**
+
+The example site is hosted in Vercel and the backend service is hosted in Heroku. The database is hosted in MongoDB Atlas. Only 2021-05, 2021-06 and station data is imported to the example site (because of free Atlas restrictions).
+
+## The app
+
+This is a web application that uses a backend service to fetch the data.
+Backend is made with NodeJS and frontend uses React and NextJS. Language used is TypeScript.
+
+Backend uses a MongoDB database, which is hosted in whatever MongoDB instance you wish to use (use environment variable MONGO_URI to provide a MongoDB URI address).
+
+If you use the provided Dockerfile and docker-compose the MongoDB instance will run in Docker container and the backend will connect to that instance. The database is populated with the data from the CSV files at startup.
+
+## Data sources
+
 To run the app download three datasets of journey data. The data is owned by City Bike Finland.
 
 -   <https://dev.hsl.fi/citybikes/od-trips-2021/2021-05.csv>
@@ -15,13 +30,6 @@ Also, there is a dataset that has information about Helsinki Region Transport’
 
 Here is a backup link to download the datasets, if you have trouble downloading them:
 <https://drive.google.com/drive/folders/10UgDUP9AQb-Nt5bMklZwixQ368t7Dfku?usp=share_link>
-
-## The app
-
-This is a web application that uses a backend service to fetch the data.
-Backend is made with NodeJS and frontend uses React and NextJS. Language used is TypeScript.
-
-Backend uses a MongoDB database, which is hosted in whatever MongoDB instance you wish to use (use environment variable MONGO_URI to provide a MongoDB URI address). If you use the provided Dockerfile and docker-compose the MongoDB instance will run in Docker container and the backend will connect to that instance. The database is populated with the data from the CSV files at startup.
 
 ## Functionality
 
@@ -59,21 +67,27 @@ Backend uses a MongoDB database, which is hosted in whatever MongoDB instance yo
 -   Backend and MongoDB database can be run in Docker (run `docker-compose up` in the root folder)
 -   There is UI for adding journeys or bicycle stations (click on the "Add" button in the table header bars of the journey or station list views)
 
-## Running the app
+## Instructions for running the app
 
 ### Backend
 
--   Add .env file with environment variables (see .env.example)
--   Make a new folder `static` in the root folder and put the downloaded CSV files there (remember to rename the stations file to stations.csv)
+-   Add .env file with environment variables (see .env.example) to the root folder
+    -   MONGO_URI is the MongoDB URI address, so you need to provide a MongoDB instance
+    -   PORT is the port where the backend will run (suggested port is 3100 as that is used in next.config.js)
+-   Make a new folder `static` in the root folder and put the downloaded CSV files there
+    -   Remember to rename the stations file to stations.csv
 -   Install NodeJS and NPM
 -   Install dependencies with `npm install`
 -   Run the backend with `npm start`
--   Backend will be running at <http://localhost:3100> (or whatever port you have set in the environment variable PORT)
+    -   Backend will be running at <http://localhost:3100> (or whatever port you have set in the environment variable PORT)
 -   If you want to run the backend in Docker, run `docker-compose up` in the root folder (this will also run MongoDB in a Docker container) - remember to add the CSV files to the `static` folder before running the Docker containers
 
 ### Frontend
 
+-   Add .env.local file with environment variables (see .env.example) to the client folder
+    -   NEXT_PUBLIC_GOOGLE_MAPS_API_KEY is the Google Developers Maps API Key from your own Google account. This is needed to show the station location on a map. You can get a key from <https://developers.google.com/maps/documentation/javascript/get-api-key>
+    -   SERVER_URL is the URL where the backend is running (suggested URL is <http://localhost:3100> as that is used by default when running the backend locally or in Docker).
 -   Install NodeJS and NPM
 -   Install dependencies with `npm install`
 -   Run the frontend with `npm run dev`
--   Frontend will be running at <http://localhost:3000>
+    -   Frontend will be running at <http://localhost:3000>

@@ -1,6 +1,6 @@
 import { GridFilterModel } from "@mui/x-data-grid";
 import { ObjectId } from "bson";
-import { Journey } from "../../types/types";
+import { Journey } from "../types/types";
 type GenericObject = Record<string, unknown>;
 
 export const saveJourneyToDB = async (

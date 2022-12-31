@@ -1,4 +1,4 @@
-import { ObjectId } from "bson";
+import { ObjectId } from "mongodb";
 export interface Journey {
 	_id?: ObjectId;
 	departure: Date;

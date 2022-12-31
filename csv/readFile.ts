@@ -2,8 +2,6 @@ import fs from "fs";
 import Papa from "papaparse";
 var camelCase = require("lodash.camelcase");
 
-import { Journey, Station } from "../types/types";
-
 const getDataFromCSVFile = async (filePath: string): Promise<any[]> => {
 	return new Promise((resolve: any, reject) => {
 		const file = fs.createReadStream(filePath);

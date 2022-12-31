@@ -31,6 +31,7 @@ export default function Page() {
 				<div
 					style={{
 						display: "flex",
+						flexWrap: "wrap",
 						alignItems: "center",
 						justifyContent: "center",
 					}}
@@ -43,10 +44,10 @@ export default function Page() {
 					>
 						<Typography
 							variant="h2"
+							component="h1"
 							color={green["A700"]}
 							sx={{
 								fontWeight: 900,
-								fontSize: "5rem",
 							}}
 						>
 							Helsinki Citybikes
@@ -76,8 +77,6 @@ export default function Page() {
 									sx={{
 										fontWeight: 900,
 										fontStyle: "italic",
-										display: "inline",
-										marginX: 2,
 									}}
 								>
 									JOURNEYS
@@ -95,8 +94,6 @@ export default function Page() {
 									sx={{
 										fontWeight: 900,
 										fontStyle: "italic",
-										display: "inline",
-										marginX: 2,
 									}}
 								>
 									STATIONS
@@ -113,7 +110,21 @@ export default function Page() {
 						</Typography>
 					</div>
 					<div style={{ flexGrow: 1 }}>
-						<Lottie animationData={bicycleAnimation} loop={true} />
+						<div
+							style={{
+								display: "flex",
+								alignItems: "center",
+								justifyContent: "center",
+							}}
+						>
+							<Lottie
+								style={{
+									maxWidth: "400px",
+								}}
+								animationData={bicycleAnimation}
+								loop={true}
+							/>
+						</div>
 					</div>
 				</div>
 			</Container>

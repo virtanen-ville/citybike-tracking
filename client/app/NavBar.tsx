@@ -13,12 +13,13 @@ import PedalBikeIcon from "@mui/icons-material/PedalBike";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import { useColorMode } from "./ColorModeContext";
-//import { ColorModeContext } from "./layout";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import Link from "next/link";
 
 export default function NavBar() {
 	const theme = useTheme();
 	const toggleColorMode = useColorMode();
+	const breakPointUpMedium = useMediaQuery(theme.breakpoints.up("md"));
 
 	return (
 		<AppBar position="sticky">
@@ -34,22 +35,26 @@ export default function NavBar() {
 						<PedalBikeIcon fontSize="large" />
 					</IconButton>
 				</Link>
-				<Link
-					href={"/"}
-					passHref
-					style={{ textDecoration: "none", flexGrow: 1 }}
-				>
-					<Typography
-						variant="h4"
-						component="div"
-						color={"secondary"}
-						sx={{
-							fontWeight: "bold",
-						}}
+				{breakPointUpMedium ? (
+					<Link
+						href={"/"}
+						passHref
+						style={{ textDecoration: "none", flexGrow: 1 }}
 					>
-						CITYBIKES
-					</Typography>
-				</Link>
+						<Typography
+							variant="h4"
+							component="div"
+							color={"secondary"}
+							sx={{
+								fontWeight: "bold",
+							}}
+						>
+							CITYBIKES
+						</Typography>
+					</Link>
+				) : (
+					<div style={{ flexGrow: 1 }}></div>
+				)}
 				<Link
 					href={"/journeys"}
 					passHref
@@ -58,7 +63,7 @@ export default function NavBar() {
 					<Button
 						variant="outlined"
 						color="secondary"
-						size="large"
+						size={breakPointUpMedium ? "large" : "medium"}
 						sx={{ my: 2, mx: 1, display: "block" }}
 					>
 						Journeys
@@ -72,7 +77,7 @@ export default function NavBar() {
 					<Button
 						variant="outlined"
 						color="secondary"
-						size="large"
+						size={breakPointUpMedium ? "large" : "medium"}
 						sx={{ my: 2, mx: 1, display: "block" }}
 					>
 						Stations

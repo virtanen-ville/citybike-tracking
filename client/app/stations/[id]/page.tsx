@@ -87,15 +87,22 @@ export default function Page({ params }: { params: Params }) {
 		const controller = new AbortController();
 		setStationDataLoading(true);
 		const fetchStationData = async () => {
-			const data = await getStationDataFromDB(
-				params.id,
-				startDate?.toDate() || new Date(0),
-				endDate?.toDate() || new Date(),
-				controller
-			);
+			try {
+				const data = await getStationDataFromDB(
+					params.id,
+					startDate?.toDate() || new Date(0),
+					endDate?.toDate() || new Date(),
+					controller
+				);
 
-			setStationData(data);
-			setStationDataLoading(false);
+				setStationData(data);
+				setStationDataLoading(false);
+			} catch (error: any) {
+				if (error.name === "AbortError") {
+					return;
+				}
+				console.error(error);
+			}
 		};
 		fetchStationData();
 		return () => {

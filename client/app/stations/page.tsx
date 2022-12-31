@@ -168,6 +168,12 @@ export default function Page() {
 						onRowClick={handleRowClick}
 						rows={rows}
 						columns={columns}
+						sx={{
+							"& .MuiDataGrid-row:hover": {
+								backgroundColor: "primary.main",
+								cursor: "pointer",
+							},
+						}}
 					/>
 				</div>
 			</Container>

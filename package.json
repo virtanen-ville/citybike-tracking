@@ -1,7 +1,7 @@
 {
-	"name": "citybike-tracker",
+	"name": "citybike-tracking",
 	"version": "1.0.0",
-	"description": "",
+	"description": "App for tracking Helsinki citybike journeys and stations",
 	"main": "index.ts",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
@@ -10,15 +10,15 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/virtanen-ville/next-test-app.git"
+		"url": "git+https://github.com/virtanen-ville/citybike-tracking.git"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"bugs": {
-		"url": "https://github.com/virtanen-ville/next-test-app/issues"
+		"url": "https://github.com/virtanen-ville/citybike-tracking/issues"
 	},
-	"homepage": "https://github.com/virtanen-ville/next-test-app#readme",
+	"homepage": "https://github.com/virtanen-ville/citybike-tracking#readme",
 	"devDependencies": {},
 	"dependencies": {
 		"@types/cors": "^2.8.12",

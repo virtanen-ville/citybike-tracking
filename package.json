@@ -33,7 +33,7 @@
 		"dotenv": "^16.0.3",
 		"express": "^4.19.2",
 		"lodash.camelcase": "^4.3.0",
-		"mongodb": "4.11",
+		"mongodb": "4.17",
 		"nodemon": "^2.0.20",
 		"papaparse": "^5.3.2",
 		"ts-node": "^10.9.1",
